@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading;
 
@@ -12,7 +13,7 @@ namespace ConsoleApplication1
     {
         public static void Main(string[] args)
         {
-            Exercice3();
+            Exercice4();
         }
 
         private static void Exercice1()
@@ -240,6 +241,72 @@ namespace ConsoleApplication1
             }
 
             return Math.Abs(sum - number) < 0.1;
+        }
+
+        ////////////////////////////////////////////////////
+
+        private static void Exercice4()
+        {
+            const int minimum = 1;
+            const int maximum = 100;
+            var target=new Random().Next(1,100);
+            int input;
+            var playerMin = minimum;
+            var playerMax = maximum;
+
+            do
+            {
+                Console.WriteLine("Please enter a valid number (" + minimum + " - " + maximum + "): ");
+                var inputValid = int.TryParse(Console.ReadLine(), out input);
+                if (inputValid)
+                {
+                    if (input < target)
+                    {
+                        Console.WriteLine("Higher!");
+                        if (input > playerMin)
+                        {
+                            playerMin = input;
+                        }
+
+                        DisplayProgressBar(minimum, maximum, playerMin, playerMax);
+                    }
+                    else if (input > target)
+                    {
+                        Console.WriteLine("Lower!");
+                        if (input < playerMax)
+                        {
+                            playerMax = input;
+                        }
+
+                        DisplayProgressBar(minimum, maximum, playerMin, playerMax);
+                    }
+                    else
+                    {
+                        Console.WriteLine("yayyy.");
+                        Thread.Sleep(5000);
+                        Environment.Exit(0);
+                    }
+                }
+                else
+                {
+                    Console.Error.WriteLine("Invalid number, please try again");
+                }
+            } while (input != target);
+        }
+
+        private static void DisplayProgressBar(int min, int max, int playerMin, int playerMax)
+        {
+            Console.Write( "[");
+            for (var i = min; i <= playerMin; ++i) {
+                Console.Write("_");
+            }
+            for (var i = playerMin + 1; i < playerMax; ++i) {
+                Console.Write("#");
+            }
+            for (var i = playerMax + 1; i <= max; ++i) {
+                Console.Write("_");
+            }
+            Console.WriteLine("]");
         }
     }
 }
