@@ -5,6 +5,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using System.Text;
 using System.Threading;
 
 namespace ConsoleApplication1
@@ -13,7 +14,7 @@ namespace ConsoleApplication1
     {
         public static void Main(string[] args)
         {
-            Exercice4();
+            Exercice5();
         }
 
         private static void Exercice1()
@@ -236,7 +237,7 @@ namespace ConsoleApplication1
             double sum = 0;
             foreach (var c in number.ToString())
             {
-                int.TryParse("" + c, out var cube);
+                int.TryParse(new string(c, 1), out var cube);
                 sum += Math.Pow(cube, 3);
             }
 
@@ -307,6 +308,34 @@ namespace ConsoleApplication1
                 Console.Write("_");
             }
             Console.WriteLine("]");
+        }
+
+        ////////////////////////////////////////////////////
+
+        private static void Exercice5()
+        {
+            var input = Console.ReadLine();
+            if (input == null) return;
+            
+            var dict = new Dictionary<char, int>();
+
+            foreach (var c in input)
+            {
+                var key = char.ToLower(c);
+                if (dict.ContainsKey(key))
+                {
+                    dict[key]++;
+                }
+                else
+                {
+                    dict[key] = 1;
+                }
+            }
+
+            foreach (var item in dict)
+            {
+                Console.WriteLine(item.Key + ": " + item.Value);
+            }
         }
     }
 }
