@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Dynamic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text;
+using System.Security;
 using System.Threading;
 
 namespace ConsoleApplication1
@@ -14,7 +10,7 @@ namespace ConsoleApplication1
     {
         public static void Main(string[] args)
         {
-            Exercice5();
+            Exercice6();
         }
 
         private static void Exercice1()
@@ -337,5 +333,174 @@ namespace ConsoleApplication1
                 Console.WriteLine(item.Key + ": " + item.Value);
             }
         }
+
+        ////////////////////////////////////////////////////
+
+        private List<Animal> animals;
+        
+        private static void Exercice6()
+        {
+            var input = string.Empty;
+
+            do
+            {
+                input = Console.ReadLine();
+
+                //Interpret(input);
+
+            } while (input != "*");
+        }
+        
+        private class AnimalLister
+        {
+            
+        }
+
+        private void Interpret(string input)
+        {
+            if (new List<string>{"dogs", "cats"}.Contains(input))
+            {
+                ListAll(input);
+            }
+            else
+            {
+                var split = input.Split(' ');
+                if (split.Length != 3)
+                {
+                    Console.WriteLine("Incorrect parameters");
+                }
+                else
+                {
+                    int.TryParse(split[2], out var age);
+                    CreateAnimal(split[0].ToLower(), split[1], age);
+                }
+            }
+        }
+
+        private void CreateAnimal(string type, string name, int age)
+        {
+            if (type == "dog")
+            {
+                animals.Add(new Dog(name, age));
+            }
+            else
+            {
+                animals.Add(new Cat(name, age));
+            }
+        }
+
+        private void ListAll(string input)
+        {
+            var typeToList = input == "dogs" ? typeof(Dog) : typeof(Cat);
+
+            Console.WriteLine("List of " + typeToList + "s: ");
+            foreach (var animal in animals)
+            {
+                if (animal.GetType() == typeToList)
+                {
+                    Console.WriteLine(animal.name + ": " + animal.age + " years old");
+                }
+            }
+        }
+
+        class Animal
+        {
+            public string name { get; private set; }
+            public int age { get; private set; }
+            private string noise { get; set; }
+            
+            public Animal(string name, int age)
+            {
+                this.name = name;
+                this.age = age;
+                this.noise = GenerateNoise();
+            }
+
+            protected virtual string GenerateNoise()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Talk()
+            {
+                Console.WriteLine(noise  + " " + name);
+            }
+        }
+
+        class Dog : Animal
+        {
+            public Dog(string name, int age) : base(name, age)
+            {
+            }
+
+            protected override string GenerateNoise()
+            {
+                return "Woof";
+            }
+        }
+
+        class Cat : Animal
+        {
+            public Cat(string name, int age) : base(name, age)
+            {
+            }
+
+            protected override string GenerateNoise()
+            {
+                return "Meow";
+            }
+        }
+
+        ////////////////////////////////////////////////////
+
+        // Unfinished as well
+        private static void Exercice6Simpler()
+        {
+            
+            var input = string.Empty;
+
+            var animalList = new List<Animal>();
+
+            do
+            {
+                input = Console.ReadLine();
+                if (input == null) continue;
+                
+                if (new List<string>{"dogs", "cats"}.Contains(input.ToLower()))
+                {
+                    ListAnimals(input, animalList);
+                }
+                else
+                {
+                    var split = input.Split(' ');
+                    if (split.Length != 3)
+                    {
+                        Console.WriteLine("Incorrect parameters");
+                    }
+                    else
+                    {
+                        int.TryParse(split[2], out var age);
+                        if (split[0].ToLower() == "dog")
+                        {
+                            animalList.Add(new Dog(split[1], age));
+                        }
+                        else
+                        {
+                            animalList.Add(new Cat(split[1], age));
+                        }
+                    }
+                }
+
+            } while (input != "*");
+        }
+
+        private static void ListAnimals(string input, List<Animal> animalList)
+        {
+            throw new NotImplementedException();
+        }
+        
+        ////////////////////////////////////////////////////
+
+        
     }
 }
